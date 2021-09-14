@@ -1,9 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../Models/User");
-router.get("/signup", (req, res) => {
-  let signup_data = {};
-  res.json({ message: "signup" });
+const User = require("../models/user.model");
+router.post("/signup", (req, res) => {
+  // console.log(req);
+  const { name, email, password } = req.body;
+
+  user
+    .save()
+    .then((data) => {
+      console.log(data);
+      res.json({ data });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 module.exports = router;

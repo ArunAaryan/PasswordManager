@@ -20,7 +20,7 @@ const createDynamicSchema = (schema_name) => {
     },
   });
 
-  return mongoose.model(schema_name, userSchema);
+  return mongoose.model(schema_name + "vault", userSchema);
 };
 //Export the model
 module.exports = createDynamicSchema;
