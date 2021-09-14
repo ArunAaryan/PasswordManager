@@ -5,28 +5,20 @@ var userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+
   url: {
     type: String,
     required: true,
-    unique: true,
   },
-  password: {
+  iv: {
     type: String,
-    required: true,
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
+  encryptedData: {
+    type: String,
+    // required:true,
   },
 });
 
 //Export the model
-module.exports = mongoose.model("Vault", userSchema);
+module.exports = mongoose.model("Record", userSchema);

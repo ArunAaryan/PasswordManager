@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const algorithm = "aes-256-cbc";
-secret = "mypassword";
+// secret = "mypassword";
 const extendKey = (secret) => {
   return crypto
     .createHash("sha256")
@@ -27,6 +27,8 @@ const decrypt = (text, secret) => {
   decrypted = Buffer.concat([decrypted, decipher.final()]);
   return decrypted.toString();
 };
+
+module.exports = { encrypt, decrypt };
 // let encryptedData = encrypt("this is confidential", "secret");
 // console.log(encryptedData);
 // let decryptedData = decrypt(encryptedData, "secret");
