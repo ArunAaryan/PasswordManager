@@ -18,10 +18,10 @@ const encrypt = (text, secret) => {
   return { iv: iv.toString("hex"), encryptedData: encrypted.toString("hex") };
 };
 
-const decrypt = (text, secret) => {
+const decrypt = (text, iv, secret) => {
   let key = extendKey(secret);
-  let iv = Buffer.from(text.iv, "hex");
-  let encryptedText = Buffer.from(text.encryptedData, "hex");
+  iv = Buffer.from(iv, "hex");
+  let encryptedText = Buffer.from(text, "hex");
   let decipher = crypto.createDecipheriv("aes-256-cbc", Buffer.from(key), iv);
   let decrypted = decipher.update(encryptedText);
   decrypted = Buffer.concat([decrypted, decipher.final()]);

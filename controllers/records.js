@@ -32,12 +32,34 @@ router.post("/new", (req, res) => {
     });
 });
 
-router.post("/get", (req, res) => {
+router.post("/getallcredentials", (req, res) => {
   User.findById(req.body.userid)
     .populate("records")
     .then((data) => {
       res.json(data["records"]);
     })
     .catch((err) => console.log(err));
+});
+
+router.post("/decryptcredentials", (req, res) => {
+  const { userid, recordId, secret } = req.body;
+  User.findById(userid)
+    .populate({ path: "records", match: { _id: recordId } })
+    .then((data) => {
+      if (data._id == userid) {
+        const { _id, encryptedData, url, iv } = data.records[0];
+
+        const { username, password } = JSON.parse(
+          decrypt(encryptedData, iv, secret)
+        );
+        res.status(200).send({ _id, username, password, url, userid });
+      } else {
+        res.status(401).send({ message: "UnAuthorized!" });
+      }
+      // console.log(data);
+    })
+    .catch((err) => {
+      res.status(500).send(err);
+    });
 });
 module.exports = router;
