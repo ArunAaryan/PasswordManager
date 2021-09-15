@@ -1,10 +1,12 @@
 const express = require("express");
+const { Model } = require("mongoose");
 const router = express.Router();
 
 const Record = require("../models/record.model");
 const User = require("../models/user.model");
 
 const { encrypt, decrypt } = require("../services/encryption-decryption");
+const { re_encrypt } = require("../services/re_encrypt");
 router.post("/new", (req, res) => {
   let { username, email, password, url, userid, secret } = req.body;
 
@@ -18,12 +20,13 @@ router.post("/new", (req, res) => {
   });
   record
     .save()
-    .then(() => {
+    .then((data) => {
       User.findById(req.body.userid).then((user) => {
         if (user) {
-          user.records.push(record);
+          // user.records.push(record);
+          user.records.push(data);
           user.save();
-          res.json({ message: "record saved" }).status(201);
+          res.json({ message: "record saved", id: data._id }).status(201);
         }
       });
     })
@@ -48,7 +51,6 @@ router.post("/decryptcredentials", (req, res) => {
     .then((data) => {
       if (data._id == userid) {
         const { _id, encryptedData, url, iv } = data.records[0];
-
         const { username, password } = JSON.parse(
           decrypt(encryptedData, iv, secret)
         );
@@ -56,10 +58,22 @@ router.post("/decryptcredentials", (req, res) => {
       } else {
         res.status(401).send({ message: "UnAuthorized!" });
       }
-      // console.log(data);
     })
     .catch((err) => {
       res.status(500).send(err);
     });
+});
+
+router.post("/re-encrypt", (req, res) => {
+  const { userid, oldSecret, newSecret } = req.body;
+  User.findById(userid)
+    .populate("records")
+    .then((data) => {
+      let bulkOps = re_encrypt(data.records, oldSecret, newSecret);
+      Record.collection.bulkWrite(bulkOps).then((results) => {
+        res.json(results);
+      });
+    })
+    .catch((err) => console.log(err));
 });
 module.exports = router;
