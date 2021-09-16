@@ -46,11 +46,14 @@ router.post("/getallcredentials", (req, res) => {
 
 router.post("/decryptcredentials", (req, res) => {
   const { userid, recordId, secret } = req.body;
+  // run a query to see the docs created by the user
   User.findById(userid)
     .populate({ path: "records", match: { _id: recordId } })
     .then((data) => {
       if (data._id == userid) {
+        // populate and find the record with match since it return an array use records[0]
         const { _id, encryptedData, url, iv } = data.records[0];
+        // decrypt returns a string. JSON.parse() to convert into js object
         const { username, password } = JSON.parse(
           decrypt(encryptedData, iv, secret)
         );
@@ -66,9 +69,12 @@ router.post("/decryptcredentials", (req, res) => {
 
 router.post("/re-encrypt", (req, res) => {
   const { userid, oldSecret, newSecret } = req.body;
+  // find all the records of user
   User.findById(userid)
     .populate("records")
     .then((data) => {
+      // send data.records <user records> to re_encrypt()
+      //  which will created an array of updated docs with new encryption
       let bulkOps = re_encrypt(data.records, oldSecret, newSecret);
       Record.collection.bulkWrite(bulkOps).then((results) => {
         res.json(results);
