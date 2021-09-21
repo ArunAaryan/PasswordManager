@@ -19,14 +19,12 @@ const encrypt = (text, secret) => {
 };
 
 const decrypt = (text, iv, secret) => {
-  console.log(text, iv, secret);
   let key = extendKey(secret);
   iv = Buffer.from(iv, "hex");
   let encryptedText = Buffer.from(text, "hex");
   let decipher = crypto.createDecipheriv("aes-256-cbc", Buffer.from(key), iv);
   let decrypted = decipher.update(encryptedText);
   decrypted = Buffer.concat([decrypted, decipher.final()]);
-  console.log(decrypted.toString());
   return decrypted.toString();
 };
 
