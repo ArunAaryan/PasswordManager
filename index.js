@@ -1,5 +1,17 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://192.168.1.103:5000",
+      "http://192.168.1.103:3000",
+    ],
+    credentials: true,
+  })
+);
+// app.use(cors({ origin: "http://192.168.1.103:3000", credentials: true }));
 const cookieParser = require("cookie-parser");
 const validateJwtCookie = require("./auth/cookie.validator");
 app.use(express.json());
@@ -14,6 +26,6 @@ const auth = require("./controllers/routes.auth");
 // example url = "localhost:3000/auth/signup"
 app.use("/auth", auth);
 app.use("/records", records);
-app.listen(3000, () => {
-  console.log("listening on 3000");
+app.listen(5000, () => {
+  console.log("listening on 5000");
 });

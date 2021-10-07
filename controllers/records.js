@@ -21,11 +21,14 @@ router.post("/new", validateJwtCookie, (req, res) => {
   record
     .save()
     .then((data) => {
+      console.log(data);
       User.findById(id).then((user) => {
         if (user) {
+          console.log(user);
           // user.records.push(record);
           user.records.push(data);
           user.save().then(() => {
+            console.log(user);
             res.json({ message: "record saved", id: data._id }).status(201);
           });
         }

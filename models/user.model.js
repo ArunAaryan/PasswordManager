@@ -24,13 +24,13 @@ var userSchema = new Schema({
   records: [{ type: mongoose.Schema.Types.ObjectId, ref: "Record" }],
 });
 
-userSchema.pre("save", async function (next) {
-  const user = this;
-  // console.log("password", user.password);
-  const hashedPassword = await bcrypt.hash(this.password, 10);
-  this.password = hashedPassword;
-  next();
-});
+// userSchema.pre("save", async function (next) {
+//   const user = this;
+//   // console.log("password", user.password);
+//   const hashedPassword = await bcrypt.hash(this.password, 10);
+//   this.password = hashedPassword;
+//   next();
+// });
 
 userSchema.methods.checkPassword = async function (password) {
   const user = this;
