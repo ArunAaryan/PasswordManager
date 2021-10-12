@@ -142,16 +142,22 @@ Routes : Private
 <font color = "orange">
 records/re-encrypt
 </font>
+
 ```
 {
     "userid":"61fee7a3fda0...",
     "oldSecret":"old_secret_",
     "newSecret":"_new_secret"
 }
+
 ```
+
 > response : takes time depending on no. of records
+
 ```
+
 [{
  <updated records...>
 }]
+
 ```
