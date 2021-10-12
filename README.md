@@ -108,17 +108,21 @@ Routes : Private
 ```
 
 > response :
-> {
-> "\_id": "6149b02f519s355d7ac5d7",
-> "username": "Facebook",
-> "url": "www.facebook.com",
-> "encryptedData": "dc981279505df88fd255cd9d8369536bfe21793164de1ad53eedc9b86ad577fa68",
-> "\_\_v": 0
-> }
+
+```
+ {
+"id": "6149b02f519s355d7ac5d7",
+ "username": "Facebook",
+ "url": "www.facebook.com",
+ "encryptedData": "dc981279505df88fd255cd9d8369536bfe21793164de1ad53eedc9b86ad577fa68",
+ "v": 0
+ }
+```
 
 <font color = "orange">
 /records/new
 </font>
+
 ```
 {
     "username_e":"someone",
@@ -126,10 +130,13 @@ Routes : Private
     "url_e" : "someone@example.com"
 }
 ```
-> response 
-{
+
+> response
+> {
+
     "message": "record saved",
     "id": "61653eb80ca2f....."
+
 }
 
 <font color = "orange">
